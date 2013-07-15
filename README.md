@@ -1,4 +1,4 @@
-# AppDynamics Atlassian JIRA Alerting Extension
+# AppDynamics Atlassian JIRA - Alerting Extension
 
 ##Use Case
 
