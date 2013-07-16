@@ -204,7 +204,7 @@ Place the createJIRAissue directory (containing params.sh and createJIRAiss
 
 Once a ticket is created and you click its summary you can see the details in JIRA:
 
-![](appdynamics-docs/images/jira_ticket_summary.png)
+![](https://github.com/Appdynamics/appdynamics-docs/blob/master/images/jira_ticket_summary.png)
 
 ##Contributing
 
