@@ -206,11 +206,15 @@ Once a ticket is created and you click its summary you can see the details in JI
 
 ![](http://appsphere.appdynamics.com/t5/image/serverpage/image-id/61iAE3FA4EF35D76DA1/image-size/original?v=mpbl-1&px=-1)
 
+
 ##Contributing
 
-Always feel free to fork and contribute any changes directly via GitHub.
+Always feel free to fork and contribute any changes directly via [GitHub](https://github.com/Appdynamics/jira-alerting-extension).
 
+##Community
+
+Find out more in the [AppSphere](http://appsphere.appdynamics.com/t5/Extensions/Atlassian-JIRA-Alerting-Extension/idi-p/749) community.
 
 ##Support
 
-For any support questions, please contact ace@appdynamics.com.
+For any questions or feature request, please contact [AppDynamics Center of Excellence](mailto://ace-request@appdynamics.com).
