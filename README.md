@@ -4,22 +4,31 @@
 
 JIRA from Atlassian, Inc. is a bug and issue tracking product used for project management. AppDynamics Pro 3.6 integrates directly with Atlassian JIRA to create JIRA tickets in response to AppDynamics alerts. With the Atlassian JIRA extension you can leverage your existing ticketing infrastructure to notify the operations team and resolve performance degradation issues.
 
+##Package
+
+Run ant from jira-alerting-extension directory. This will create the following file in the dist directory: JiraAlertingExtension.zip.
+
 ##Installation
 
 
-###1. Modify params.sh File
+###1. Download and unzip JiraAlertingExtension.zip
+ 
+Download and unzip the JiraAlertingExtension.zip file into your <Controller-Home> directory.
+ 
 
-   Located under the IntegrationsSDK/CustomNotification/bug-tracking/jira5/createJIRAissue/ directory is a params.sh file. This file is must have its parameters filled out in the following manner:
+###2. Modify params.sh File
 
-   1.1 Modify the DOMAIN variable to be your JIRA domain. For example: 
+   Located under the <Controller Home>/custom/actions/createJIRAissue/ directory is a params.sh file. This file is must have its parameters filled out in the following manner:
+
+   2.1 Modify the DOMAIN variable to be your JIRA domain. For example: 
    
       DOMAIN = "https://sampledomain.jira.com"
 
-   1.2 Modify the USER variable to be the username that will issue these generated tickets.
+   2.2 Modify the USER variable to be the username that will issue these generated tickets.
 
-   1.3 Modify the PASSWORD variable to be the password of the entered username that will issue these generated tickets.
+   2.3 Modify the PASSWORD variable to be the password of the entered username that will issue these generated tickets.
 
-   1.4 Modify the PROJECT variable to be the project code to which generated tickets should be issued.
+   2.4 Modify the PROJECT variable to be the project code to which generated tickets should be issued.
    
    The createJIRAissue.sh file follows the following table to tie in the parameters together:
 
@@ -195,10 +204,10 @@ CustomNotifications-InstallingCustomActionsontheController) (login required).
 
 The custom.xml file and createJIRAissue directory used for this
 custom notification are located within
-the IntegrationsSDK/CustomNotification/bug-tracking/jira5 directory.
+the  directory <Controller Home>/custom/actions/.
 
 Place the createJIRAissue directory (containing params.sh and createJIRAissue.sh), along with the custom.xml file, into the
-\<controller_home>/custom/actions/ directory.
+<Controller Home>/custom/actions/ directory.
 
 ###3. Look for the newest created issue in JIRA
 
