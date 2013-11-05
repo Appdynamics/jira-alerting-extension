@@ -18,7 +18,7 @@ Download and unzip the JiraAlertingExtension.zip file into your <Controller-Home
 
 ###2. Modify params.sh File
 
-   Located under the <Controller Home>/custom/actions/createJIRAissue/ directory is a params.sh file. This file is must have its parameters filled out in the following manner:
+   Located under the ``<Controller Home>/custom/actions/createJIRAissue/`` directory is a params.sh file. This file is must have its parameters filled out in the following manner:
 
    2.1 Modify the DOMAIN variable to be your JIRA domain. For example: 
    
@@ -204,7 +204,7 @@ CustomNotifications-InstallingCustomActionsontheController) (login required).
 
 The custom.xml file and createJIRAissue directory used for this
 custom notification are located within
-the  directory <Controller Home>/custom/actions/.
+the  directory ``<Controller Home>/custom/actions/``.
 
 Place the createJIRAissue directory (containing params.sh and createJIRAissue.sh), along with the custom.xml file, into the
 <Controller Home>/custom/actions/ directory.
