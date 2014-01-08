@@ -190,10 +190,12 @@ SUMMARY=$SUMMARY"""\nIncident URL: """$DEEP_LINK_URL""$INCIDENT_ID"""\n"
 LOG_FILE=../../../logs/jira_custom_notification.log
 echo > $LOG_FILE 
 echo ------ Action Initiated ------ >> $LOG_FILE
-echo "Initiate PagerDuty Alert Action at " $PVN_ALERT_TIME >> $LOG_FILE
+echo "Open Jira ticket at " $PVN_ALERT_TIME >> $LOG_FILE
 echo ====== PARAMETERS ====== >> $LOG_FILE
-echo "service_key: " $API_KEY >> $LOG_FILE
-echo "event_type: " "trigger" >> $LOG_FILE
+echo "jiradomain: " $DOMAIN >> $LOG_FILE
+echo "jirauser: " $USER >> $LOG_FILE
+echo "jirapassword: " $PASSWORD >> $LOG_FILE
+echo "project: " $PROJECT >> $LOG_FILE
 echo "description: " $POLICY_NAME >> $LOG_FILE
 echo "details: " $SUMMARY >> $LOG_FILE
 echo ====== RESPONSE ====== >> $LOG_FILE 
