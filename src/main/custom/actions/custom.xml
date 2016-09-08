@@ -1,6 +1,0 @@
-<custom-actions>
-    <action>
-        <type>createJIRAissue</type>
-	<executable>createJIRAissue.sh</executable>
-    </action>
-</custom-actions>

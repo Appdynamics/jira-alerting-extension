@@ -1,0 +1,22 @@
+
+domain: "https://sample.atlassian.net"
+username: "admin"
+password: "password"
+projectKey: "PROJECT"
+#Optional, if empty logged as Bug
+issueType: "Bug"
+
+#http timeouts
+connectTimeout: 10000
+socketTimeout: 10000
+
+#proxy details, either provide proxyUri or provide proxyHost and proxyPort.
+proxy:
+ host:
+ port:
+ uri:
+ user:
+ password:
+ passwordEncrypted:
+
+
