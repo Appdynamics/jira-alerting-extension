@@ -16,7 +16,7 @@
         </layout>
     </appender>
 
-    <logger name="com.appdynamics.extensions.jira" additivity="false">
+    <logger name="com.appdynamics" additivity="false">
         <level value="info"/>
         <appender-ref ref="RollingFileAppender"/>
         <appender-ref ref="ConsoleAppender"/>

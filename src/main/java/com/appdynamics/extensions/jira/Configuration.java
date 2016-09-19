@@ -25,6 +25,9 @@ public class Configuration {
     private String projectKey;
     private String issueType;
 
+    private String encryptionKey;
+    private String encryptedPassword;
+
     private int connectTimeout = 10000;
     private int socketTimeout = 10000;
 
@@ -92,5 +95,21 @@ public class Configuration {
 
     public void setIssueType(String issueType) {
         this.issueType = issueType;
+    }
+
+    public String getEncryptionKey() {
+        return encryptionKey;
+    }
+
+    public void setEncryptionKey(String encryptionKey) {
+        this.encryptionKey = encryptionKey;
+    }
+
+    public String getEncryptedPassword() {
+        return encryptedPassword;
+    }
+
+    public void setEncryptedPassword(String encryptedPassword) {
+        this.encryptedPassword = encryptedPassword;
     }
 }

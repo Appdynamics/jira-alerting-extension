@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 AppDynamics, Inc.
- * <p/>
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p/>
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- * <p/>
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,16 +17,18 @@ package com.appdynamics.extensions.jira;
 
 import com.appdynamics.extensions.alerts.customevents.Event;
 import com.appdynamics.extensions.alerts.customevents.EventBuilder;
-import com.appdynamics.extensions.http.Response;
 import com.appdynamics.extensions.jira.api.Alert;
 import com.appdynamics.extensions.jira.api.AlertBuilder;
+import com.appdynamics.extensions.jira.common.FileSystemStore;
 import com.appdynamics.extensions.jira.common.HttpHandler;
 import com.appdynamics.extensions.yml.YmlReader;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Strings;
 import org.apache.log4j.Logger;
 
 import java.io.File;
-import java.net.HttpURLConnection;
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -38,7 +40,7 @@ public class JiraAlertExtension {
     private static Logger logger = Logger.getLogger(JiraAlertExtension.class);
 
     final AlertBuilder alertBuilder = new AlertBuilder();
-    Configuration config;
+    final Configuration config;
 
     public JiraAlertExtension(Configuration config) {
         this.config = config;
@@ -65,7 +67,7 @@ public class JiraAlertExtension {
                 return;
             }
         } catch (Exception e) {
-            logger.error("Error processing an event", e);
+            logger.error("Error processing an event ", e);
         }
         logger.error("Jira Extension completed with errors");
     }
@@ -77,23 +79,43 @@ public class JiraAlertExtension {
     public boolean processAnEvent(String[] args) {
         Event event = new EventBuilder().build(args);
         if (event != null) {
-            Alert alert = alertBuilder.buildAlert(event, config);
-            if (alert != null) {
-                try {
-                    HttpHandler handler = new HttpHandler(config);
-                    String json = alertBuilder.convertIntoJsonString(alert);
-                    logger.debug("Json posted to Jira ::" + json);
-                    Response response = handler.postAlert(json);
-                    if (response != null && response.getStatus() == HttpURLConnection.HTTP_OK || response.getStatus() == HttpURLConnection.HTTP_CREATED) {
-                        logger.info("Data successfully posted to Jira");
-                        return true;
-                    }
-                    logger.error("Data post failed");
-                } catch (JsonProcessingException e) {
-                    logger.error("Cannot serialized object into Json." + e);
+            try {
+                String issueId = FileSystemStore.INSTANCE.getFromStore(alertBuilder.getEventId(event));
+                HttpHandler handler = new HttpHandler(config);
+                Alert alert;
+
+                if (issueId != null) {
+                    //update
+                    alert = alertBuilder.buildAlert(event, config, false);
+                } else {
+                    alert = alertBuilder.buildAlert(event, config, true);
                 }
+                if (alert != null) {
+                    String json = alertBuilder.convertIntoJsonString(alert);
+                    String response = handler.postAlertDataToJira(json, issueId);
+                    if (!Strings.isNullOrEmpty(response)) {
+                        FileSystemStore.INSTANCE.putInStore(alert.getAlertId(), getIssueIDFromResponse(response));
+                    }
+                    return true;
+                }
+
+            } catch (Exception e) {
+                logger.error("Error while processing event data " + event, e);
+            } finally {
+                FileSystemStore.INSTANCE.closeStore();
             }
         }
         return false;
+    }
+
+    private String getIssueIDFromResponse(String response) {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = null;
+        try {
+            node = mapper.readTree(response);
+        } catch (IOException e) {
+            logger.error("Error while reading the Json tree: " + response, e);
+        }
+        return node.get("id").textValue();
     }
 }

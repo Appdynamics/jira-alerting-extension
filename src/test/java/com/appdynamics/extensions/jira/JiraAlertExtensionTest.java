@@ -12,6 +12,7 @@ public class JiraAlertExtensionTest {
 
     @Test
     public void canPostHealthRuleViolationEvent() {
+
         Configuration configuration = YmlReader.readFromFile(this.getClass().getResource("/conf/config.yml").getFile(), Configuration.class);
         JiraAlertExtension alertExtension = new JiraAlertExtension(configuration);
         alertExtension.processAnEvent(eventArgs.getHealthRuleViolationEventWithOneEvalEntityAndTriggerNoBaseline());

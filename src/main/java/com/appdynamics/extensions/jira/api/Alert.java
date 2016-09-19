@@ -15,12 +15,16 @@
  */
 package com.appdynamics.extensions.jira.api;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @JsonRootName(value = "fields")
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+
 public class Alert {
 
     private Map<String, String> project = new HashMap<String, String>();
@@ -28,6 +32,9 @@ public class Alert {
     private String description;
     private Map<String, String> issuetype = new HashMap<String, String>();
     private Map<String, String> priority = new HashMap<String, String>();
+
+    @JsonIgnore
+    private String alertId;
 
     public Map<String, String> getProject() {
         return project;
@@ -67,5 +74,13 @@ public class Alert {
 
     public void setPriority(Map<String, String> priority) {
         this.priority = priority;
+    }
+
+    public String getAlertId() {
+        return alertId;
+    }
+
+    public void setAlertId(String alertId) {
+        this.alertId = alertId;
     }
 }

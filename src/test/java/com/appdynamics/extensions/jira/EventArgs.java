@@ -79,13 +79,13 @@ public class EventArgs {
     private void generateTrailingArg(List<String> strings) {
         //summary message
         strings.add("\"CPU utilization is too high triggerded at Wed Feb 17 09:42:55 IST 2016. This policy was violated because the following conditions were met for the MyMacMachineAgentNode1 Node for the last 1 minute(s):   For Evaluation Entity: MyMacMachineAgentNode1 Node - Hardware Resources|CPU|%Busy Condition is greater than 4. Observed value = 40.0\"");  //observed value 1
-        strings.add("\"3\"");  //incident id
+        strings.add("\"11\"");  //incident id
         strings.add("\"http://localhost:8090/controller/#location=APP_INCIDENT_DETAIL&incident=\"");  //deep link url
         strings.add("\"POLICY_CANCELED_CRITICAL\"");  //event type
     }
 
     private void generateLeadingArgs(List<String> strings) {
-        strings.add("\"SlackTestApp\""); //appname
+        strings.add("\"SlackTestApplication\""); //appname
         strings.add("\"4\""); //appID
         strings.add("\"Wed Feb 17 09:42:55 IST 2016\""); //pvn alert time
         strings.add("\"1\""); //priority

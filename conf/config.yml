@@ -1,10 +1,12 @@
 
-domain: "https://sample.atlassian.net"
-username: "admin"
-password: "password"
-projectKey: "PROJECT"
+domain: "https://appdx-dev.atlassian.net"
+projectKey: "EXT"
 #Optional, if empty logged as Bug
 issueType: "Bug"
+
+username: "admin"
+password: "p@ssword123"
+#encryptedPassword:
 
 #http timeouts
 connectTimeout: 10000
@@ -12,11 +14,9 @@ socketTimeout: 10000
 
 #proxy details, either provide proxyUri or provide proxyHost and proxyPort.
 proxy:
- host:
- port:
  uri:
  user:
  password:
- passwordEncrypted:
+ #encryptedPassword:
 
 
