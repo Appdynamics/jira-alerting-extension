@@ -17,8 +17,9 @@ package com.appdynamics.extensions.jira;
 
 import com.appdynamics.extensions.alerts.customevents.Event;
 import com.appdynamics.extensions.alerts.customevents.EventBuilder;
-import com.appdynamics.extensions.jira.api.Alert;
 import com.appdynamics.extensions.jira.api.AlertBuilder;
+import com.appdynamics.extensions.jira.api.AlertForCreatingIssue;
+import com.appdynamics.extensions.jira.api.AlertForUpdatingIssue;
 import com.appdynamics.extensions.jira.common.FileSystemStore;
 import com.appdynamics.extensions.jira.common.HttpHandler;
 import com.appdynamics.extensions.yml.YmlReader;
@@ -62,7 +63,7 @@ public class JiraAlertExtension {
             JiraAlertExtension alertExtension = new JiraAlertExtension(config);
             boolean status = alertExtension.processAnEvent(args);
             if (status) {
-                logger.info("Jira Extension completed successfully.");
+                logger.info("Jira Extension execution completed.");
                 logger.info("******************END******************");
                 return;
             }
@@ -80,25 +81,24 @@ public class JiraAlertExtension {
         Event event = new EventBuilder().build(args);
         if (event != null) {
             try {
-                String issueId = FileSystemStore.INSTANCE.getFromStore(alertBuilder.getEventId(event));
                 HttpHandler handler = new HttpHandler(config);
-                Alert alert;
-
-                if (issueId != null) {
-                    //update
-                    alert = alertBuilder.buildAlert(event, config, false);
-                } else {
-                    alert = alertBuilder.buildAlert(event, config, true);
-                }
-                if (alert != null) {
-                    String json = alertBuilder.convertIntoJsonString(alert);
-                    String response = handler.postAlertDataToJira(json, issueId);
+                String jsonPayload;
+                String issueId = FileSystemStore.INSTANCE.getFromStore(alertBuilder.getEventId(event));
+                if (issueId == null) {
+                    // create
+                    AlertForCreatingIssue alert = alertBuilder.buildAlert(event, config);
+                    jsonPayload = alertBuilder.convertIntoJsonString(alert);
+                    String response = handler.postAlertDataToJira(jsonPayload);
                     if (!Strings.isNullOrEmpty(response)) {
                         FileSystemStore.INSTANCE.putInStore(alert.getAlertId(), getIssueIDFromResponse(response));
                     }
-                    return true;
+                } else {
+                    //update
+                    AlertForUpdatingIssue alertUpdate = alertBuilder.buildAlertForUpdatingIssue(event);
+                    jsonPayload = alertBuilder.convertIntoJsonString(alertUpdate);
+                    handler.putAlertDataToJira(jsonPayload, issueId);
                 }
-
+                return true;
             } catch (Exception e) {
                 logger.error("Error while processing event data " + event, e);
             } finally {

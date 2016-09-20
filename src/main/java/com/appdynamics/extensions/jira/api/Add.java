@@ -16,10 +16,16 @@
 package com.appdynamics.extensions.jira.api;
 
 /**
- * Created by balakrishnavadavalasa on 06/09/16.
+ * Created by balakrishnavadavalasa on 20/09/16.
  */
-public class FieldKeys {
-    public static final String PROJECT_KEY = "key";
-    public static final String ISSUE_TYPE_NAME = "name";
-    public static final String PRIORITY_ID = "id";
+public class Add {
+    private String body;
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
 }

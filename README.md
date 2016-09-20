@@ -9,9 +9,9 @@ JIRA from Atlassian, Inc. is a bug and issue tracking product used for project m
 
 ##Installation
 
-1. To build from source, clone this repository and run `mvn clean install`. This will produce a jira-alerting-extension-<version>.zip in the target directory.
+1. To build from source, clone this repository and run `mvn clean install`. This will produce a jira-alert-<version>.zip in the target directory.
 
-2. Unzip the jira-alerting-extension-<version>.zip file into `<CONTROLLER_HOME_DIR>/custom/actions/`.
+2. Unzip the jira-alert-<version>.zip file into `<CONTROLLER_HOME_DIR>/custom/actions/`.
 
 3. Check if you have custom.xml file in `<CONTROLLER_HOME_DIR>/custom/actions/` directory. If yes, add the following xml to the <custom-actions> element.
        
@@ -45,21 +45,22 @@ JIRA from Atlassian, Inc. is a bug and issue tracking product used for project m
   
       ```
       domain: "https://sampledomain.atlassian.net"
-      username: "user"
-      password: "password"
+      username: "<USER>"
+      password: "<PASSWORD>"
+      #encryptedPassword: ""
       projectKey: "PROJECT_KEY"
       #Optional, if empty logged as Bug
       issueType: "Bug"
+      #encryptionKey: ""
       #http timeouts
       connectTimeout: 10000
       socketTimeout: 10000
-      #proxy details, provide either proxyUri OR proxyHost and proxyPort.
+      #proxy details
       proxy:
-       #host:
-       #port:
        uri:
        username:
        password:
+       #encryptedPassword:
       ```
   
 5. Please refer to the following doc to create Custom Actions
@@ -71,6 +72,15 @@ JIRA from Atlassian, Inc. is a bug and issue tracking product used for project m
      * [Build an Custom Action](https://docs.appdynamics.com/display/PRO42/Build+a+Custom+Action)
 
 6. Look for the newest created ticket in Jira.
+
+
+##Password Encryption Support
+To avoid setting the clear text password in the config.yml, please follow the process below to encrypt the password
+
+1. Download the util jar to encrypt the password from [https://github.com/Appdynamics/maven-repo/blob/master/releases/com/appdynamics/appd-exts-commons/1.1.2/appd-exts-commons-1.1.2.jar](https://github.com/Appdynamics/maven-repo/blob/master/releases/com/appdynamics/appd-exts-commons/1.1.2/appd-exts-commons-1.1.2.jar) and navigate to the downloaded directory
+2. Encrypt password from the commandline
+`java -cp appd-exts-commons-1.1.2.jar com.appdynamics.extensions.crypto.Encryptor encryptionKey password`
+3. Specify the encryptionKey and generated password for encryptedPassword in config.yml
 
 
 ##Contributing

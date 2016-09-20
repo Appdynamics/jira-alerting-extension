@@ -33,39 +33,58 @@ public class AlertBuilder {
     private static final String NEW_LINE = "\n";
     private static Logger logger = Logger.getLogger(AlertBuilder.class);
 
-    public Alert buildAlert(Event event, Configuration config, boolean createJiraIssue) {
+    public AlertForCreatingIssue buildAlert(Event event, Configuration config) {
         if (config != null) {
-            Alert alert = new Alert();
+            AlertForCreatingIssue alert = new AlertForCreatingIssue();
 
             String summary;
             String description;
             if (event instanceof HealthRuleViolationEvent) {
                 HealthRuleViolationEvent violationEvent = (HealthRuleViolationEvent) event;
                 summary = getSummary(violationEvent);
-                description = getDescription(violationEvent, createJiraIssue);
+                description = getDescription(violationEvent);
                 alert.setAlertId(violationEvent.getIncidentID());
             } else {
                 OtherEvent otherEvent = (OtherEvent) event;
                 summary = getSummary(otherEvent);
-                description = getDescription(otherEvent, createJiraIssue);
+                description = getDescription(otherEvent);
                 alert.setAlertId(otherEvent.getEventNotificationId());
             }
 
-            if (createJiraIssue) {
-                alert.getProject().put(FieldKeys.PROJECT_KEY, config.getProjectKey());
+            alert.getProject().put(FieldKeys.PROJECT_KEY, config.getProjectKey());
 
-                alert.getIssuetype().put(FieldKeys.ISSUE_TYPE_NAME, getIssueType(config));
+            alert.getIssuetype().put(FieldKeys.ISSUE_TYPE_NAME, getIssueType(config));
 
-                alert.getPriority().put(FieldKeys.PRIORITY_ID, event.getPriority());
+            alert.getPriority().put(FieldKeys.PRIORITY_ID, event.getPriority());
 
-                alert.setSummary(summary);
-                alert.setDescription(description);
-
-            }
+            alert.setSummary(summary);
+            alert.setDescription(description);
 
             return alert;
         }
         return null;
+    }
+
+    public AlertForUpdatingIssue buildAlertForUpdatingIssue(Event event) {
+        AlertForUpdatingIssue alertUpdate = new AlertForUpdatingIssue();
+        if (event != null) {
+            String msg;
+            if(event instanceof HealthRuleViolationEvent) {
+                HealthRuleViolationEvent violationEvent = (HealthRuleViolationEvent) event;
+                msg = "Summary Message : " + violationEvent.getSummaryMessage() + NEW_LINE;
+            } else {
+                OtherEvent otherEvent = (OtherEvent) event;
+                msg = "Deep Link URL: " + otherEvent.getDeepLinkUrl();
+            }
+
+            Add add = new Add();
+            add.setBody(msg);
+            Comment comment = new Comment();
+            comment.setAdd(add);
+            Comment[] comments = {comment};
+            alertUpdate.setComment(comments);
+        }
+        return alertUpdate;
     }
 
     private String getIssueType(Configuration config) {
@@ -84,52 +103,51 @@ public class AlertBuilder {
 
     }
 
-    private String getDescription(HealthRuleViolationEvent violationEvent, boolean createJiraIssue) {
+    private String getDescription(HealthRuleViolationEvent violationEvent) {
         StringBuilder description = new StringBuilder();
 
-        if (createJiraIssue) {
-            description.append("Application Name : ").append(violationEvent.getAppName()).append(NEW_LINE);
-            description.append("Policy Violation Alert Time : ").append(violationEvent.getPvnAlertTime()).append(NEW_LINE);
-            description.append("Severity : ").append(violationEvent.getSeverity()).append(NEW_LINE);
-            description.append("Health rule that violated : ").append(violationEvent.getHealthRuleName()).append(NEW_LINE);
-            description.append("Violation time in minutes : ").append(violationEvent.getPvnTimePeriodInMinutes()).append(NEW_LINE);
-            description.append("Affected Entity Type : ").append(violationEvent.getAffectedEntityType()).append(NEW_LINE);
-            description.append("Name of Affected Entity : ").append(violationEvent.getAffectedEntityName()).append(NEW_LINE);
+        description.append("Application Name : ").append(violationEvent.getAppName()).append(NEW_LINE);
+        description.append("Policy Violation Alert Time : ").append(violationEvent.getPvnAlertTime()).append(NEW_LINE);
+        description.append("Severity : ").append(violationEvent.getSeverity()).append(NEW_LINE);
+        description.append("Health rule that violated : ").append(violationEvent.getHealthRuleName()).append(NEW_LINE);
+        description.append("Violation time in minutes : ").append(violationEvent.getPvnTimePeriodInMinutes()).append(NEW_LINE);
+        description.append("Affected Entity Type : ").append(violationEvent.getAffectedEntityType()).append(NEW_LINE);
+        description.append("Name of Affected Entity : ").append(violationEvent.getAffectedEntityName()).append(NEW_LINE);
 
-            List<EvaluationEntity> evaluationEntities = violationEvent.getEvaluationEntity();
-            for (int i = 0; i < evaluationEntities.size(); i++) {
-                EvaluationEntity evaluationEntity = evaluationEntities.get(i);
+        List<EvaluationEntity> evaluationEntities = violationEvent.getEvaluationEntity();
+        for (int i = 0; i < evaluationEntities.size(); i++) {
+            EvaluationEntity evaluationEntity = evaluationEntities.get(i);
+            description.append(NEW_LINE);
+            description.append("EVALUATION ENTITY #").append(i + 1).append(":").append(NEW_LINE);
+            description.append("Evaluation Entity : ").append(evaluationEntity.getType()).append(NEW_LINE);
+            description.append("Evaluation Entity Name : ").append(evaluationEntity.getName()).append(NEW_LINE);
+
+            List<TriggerCondition> triggeredConditions = evaluationEntity.getTriggeredConditions();
+            for (int j = 0; j < triggeredConditions.size(); j++) {
+                TriggerCondition triggerCondition = triggeredConditions.get(j);
                 description.append(NEW_LINE);
-                description.append("EVALUATION ENTITY #").append(i + 1).append(":").append(NEW_LINE);
-                description.append("Evaluation Entity : ").append(evaluationEntity.getType()).append(NEW_LINE);
-                description.append("Evaluation Entity Name : ").append(evaluationEntity.getName()).append(NEW_LINE);
+                description.append("Triggered Condition #").append(j + 1).append(":").append(NEW_LINE);
+                description.append("Scope Type : ").append(triggerCondition.getScopeType()).append(NEW_LINE);
+                description.append("Scope Name : ").append(triggerCondition.getScopeName()).append(NEW_LINE);
 
-                List<TriggerCondition> triggeredConditions = evaluationEntity.getTriggeredConditions();
-                for (int j = 0; j < triggeredConditions.size(); j++) {
-                    TriggerCondition triggerCondition = triggeredConditions.get(j);
-                    description.append(NEW_LINE);
-                    description.append("Triggered Condition #").append(j + 1).append(":").append(NEW_LINE);
-                    description.append("Scope Type : ").append(triggerCondition.getScopeType()).append(NEW_LINE);
-                    description.append("Scope Name : ").append(triggerCondition.getScopeName()).append(NEW_LINE);
-
-                    if (triggerCondition.getConditionUnitType() != null && triggerCondition.getConditionUnitType().toUpperCase().startsWith("BASELINE")) {
-                        description.append("Is Default Baseline?").append(triggerCondition.isUseDefaultBaseline() ? "true" : "false").append(NEW_LINE);
-                        if (!triggerCondition.isUseDefaultBaseline()) {
-                            description.append("Baseline Name : ").append(triggerCondition.getBaselineName()).append(NEW_LINE);
-                        }
+                if (triggerCondition.getConditionUnitType() != null && triggerCondition.getConditionUnitType().toUpperCase().startsWith("BASELINE")) {
+                    description.append("Is Default Baseline?").append(triggerCondition.isUseDefaultBaseline() ? "true" : "false").append(NEW_LINE);
+                    if (!triggerCondition.isUseDefaultBaseline()) {
+                        description.append("Baseline Name : ").append(triggerCondition.getBaselineName()).append(NEW_LINE);
                     }
-                    description.append(triggerCondition.getConditionName()).append(triggerCondition.getOperator()).append(triggerCondition.getThresholdValue()).append(NEW_LINE);
-                    description.append("Violation Value : ").append(triggerCondition.getObservedValue()).append(NEW_LINE).append(NEW_LINE);
                 }
+                description.append(triggerCondition.getConditionName()).append(triggerCondition.getOperator()).append(triggerCondition.getThresholdValue()).append(NEW_LINE);
+                description.append("Violation Value : ").append(triggerCondition.getObservedValue()).append(NEW_LINE).append(NEW_LINE);
             }
-            description.append("DeepLink URL : ").append(violationEvent.getDeepLinkUrl()).append(violationEvent.getIncidentID());
         }
+        description.append("DeepLink URL : ").append(violationEvent.getDeepLinkUrl()).append(violationEvent.getIncidentID()).append(NEW_LINE);
+
         description.append("Summary Message : ").append(violationEvent.getSummaryMessage()).append(NEW_LINE);
 
         return description.toString();
     }
 
-    private String getDescription(OtherEvent otherEvent, boolean createJiraIssue) {
+    private String getDescription(OtherEvent otherEvent) {
         StringBuilder description = new StringBuilder();
 
         description.append("Application Name : ").append(otherEvent.getAppName()).append(NEW_LINE);
@@ -161,13 +179,15 @@ public class AlertBuilder {
     }
 
 
-    public String convertIntoJsonString(Alert alert) {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.enable(SerializationFeature.WRAP_ROOT_VALUE);
-        try {
-            return mapper.writeValueAsString(alert);
-        } catch (JsonProcessingException e) {
-            logger.error("Error while converting the Object to Json string " + alert, e);
+    public String convertIntoJsonString(Object alert) {
+        if (alert != null) {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.enable(SerializationFeature.WRAP_ROOT_VALUE);
+            try {
+                return mapper.writeValueAsString(alert);
+            } catch (JsonProcessingException e) {
+                logger.error("Error while converting the Object to Json string " + alert, e);
+            }
         }
         return null;
     }
@@ -178,5 +198,18 @@ public class AlertBuilder {
         } else {
             return ((OtherEvent) event).getEventNotificationId();
         }
+    }
+
+    public static void main(String[] args) throws JsonProcessingException {
+        String msg = "Summary Message : ";
+        Add add = new Add();
+        add.setBody(msg);
+        Comment comment = new Comment();
+        comment.setAdd(add);
+        Comment[] comments = {comment};
+        AlertForUpdatingIssue alert = new AlertForUpdatingIssue();
+        alert.setComment(comments);
+        ObjectMapper mapper = new ObjectMapper();
+        System.out.println(mapper.writeValueAsString(alert));
     }
 }

@@ -15,11 +15,21 @@
  */
 package com.appdynamics.extensions.jira.api;
 
+import com.fasterxml.jackson.annotation.JsonRootName;
+
 /**
- * Created by balakrishnavadavalasa on 06/09/16.
+ * Created by balakrishnavadavalasa on 19/09/16.
  */
-public class FieldKeys {
-    public static final String PROJECT_KEY = "key";
-    public static final String ISSUE_TYPE_NAME = "name";
-    public static final String PRIORITY_ID = "id";
+@JsonRootName(value = "update")
+public class AlertForUpdatingIssue {
+
+    private Comment[] comment;
+
+    public Comment[] getComment() {
+        return comment;
+    }
+
+    public void setComment(Comment[] comment) {
+        this.comment = comment;
+    }
 }
