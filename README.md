@@ -1,4 +1,4 @@
-# AppDynamics Atlassian JIRA - Alerting Extension
+# AppDynamics Alerting Extension for use with Atlassian JIRA
 
 This extension works only with a dedicated SaaS controller or an on-prem controller.
 
