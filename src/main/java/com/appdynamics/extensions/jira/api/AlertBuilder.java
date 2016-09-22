@@ -71,7 +71,11 @@ public class AlertBuilder {
             String msg;
             if(event instanceof HealthRuleViolationEvent) {
                 HealthRuleViolationEvent violationEvent = (HealthRuleViolationEvent) event;
-                msg = "Summary Message : " + violationEvent.getSummaryMessage() + NEW_LINE;
+                StringBuilder sb = new StringBuilder();
+                sb.append("Severity : ").append(violationEvent.getSeverity()).append(NEW_LINE);
+                sb.append("Event Type : ").append(violationEvent.getEventType()).append(NEW_LINE);
+                sb.append("Summary Message : ").append(violationEvent.getSummaryMessage()).append(NEW_LINE);
+                msg = sb.toString();
             } else {
                 OtherEvent otherEvent = (OtherEvent) event;
                 msg = "Deep Link URL: " + otherEvent.getDeepLinkUrl();
@@ -99,7 +103,7 @@ public class AlertBuilder {
     }
 
     private String getSummary(HealthRuleViolationEvent violationEvent) {
-        return "Health Rule: " + violationEvent.getHealthRuleName() + ", Severity: " + violationEvent.getSeverity();
+        return "Health Rule: " + violationEvent.getHealthRuleName() + " violated";
 
     }
 
@@ -110,6 +114,7 @@ public class AlertBuilder {
         description.append("Policy Violation Alert Time : ").append(violationEvent.getPvnAlertTime()).append(NEW_LINE);
         description.append("Severity : ").append(violationEvent.getSeverity()).append(NEW_LINE);
         description.append("Health rule that violated : ").append(violationEvent.getHealthRuleName()).append(NEW_LINE);
+        description.append("Event Type : ").append(violationEvent.getEventType()).append(NEW_LINE);
         description.append("Violation time in minutes : ").append(violationEvent.getPvnTimePeriodInMinutes()).append(NEW_LINE);
         description.append("Affected Entity Type : ").append(violationEvent.getAffectedEntityType()).append(NEW_LINE);
         description.append("Name of Affected Entity : ").append(violationEvent.getAffectedEntityName()).append(NEW_LINE);

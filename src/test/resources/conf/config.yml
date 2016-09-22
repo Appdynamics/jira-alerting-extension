@@ -1,8 +1,8 @@
 
-domain: "https://appdx-dev.atlassian.net"
-username: "admin"
-password: "p@ssword123"
-projectKey: "EXT"
+domain: "https://sample.atlassian.net"
+username: "<USERNAME>"
+password: "<PASSWORD>"
+projectKey: "PROJECT_KEY"
 #Optional, if empty logged as Bug
 issueType: "Bug"
 
