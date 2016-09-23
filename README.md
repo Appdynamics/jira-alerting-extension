@@ -68,7 +68,7 @@ JIRA from Atlassian, Inc. is a bug and issue tracking product used for project m
      * [Configure Policy Actions](https://docs.appdynamics.com/display/PRO42/Configure+Policies)
      * [Build an Custom Action](https://docs.appdynamics.com/display/PRO42/Build+a+Custom+Action)
 
-6. Look for the newest created ticket in Jira.
+6. Look for the newest created ticket in Jira. Sample screenshot of the issue is [here](https://raw.githubusercontent.com/Appdynamics/jira-alerting-extension/master/JIRA_Issue.png)
 
 
 ##Contributing

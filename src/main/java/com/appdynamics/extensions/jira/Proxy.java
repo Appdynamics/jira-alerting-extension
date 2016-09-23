@@ -22,7 +22,7 @@ public class Proxy {
     private String uri;
     private String user;
     private String password;
-    //private String encryptedPassword;
+    private String encryptedPassword;
 
     public String getHost() {
         return host;
@@ -64,11 +64,11 @@ public class Proxy {
         this.password = password;
     }
 
-    /*public String getEncryptedPassword() {
+    public String getEncryptedPassword() {
         return encryptedPassword;
     }
 
     public void setEncryptedPassword(String encryptedPassword) {
         this.encryptedPassword = encryptedPassword;
-    }*/
+    }
 }

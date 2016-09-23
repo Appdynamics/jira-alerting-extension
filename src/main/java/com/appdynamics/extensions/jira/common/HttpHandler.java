@@ -114,7 +114,7 @@ public class HttpHandler {
         httpMethod.addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
 
         StringBuilder sb = new StringBuilder();
-        sb.append(config.getUsername()).append(":").append(config.getPassword());
+        sb.append(config.getUsername()).append(":").append(getPassword(config.getPassword(), config.getEncryptedPassword()));
         String authHeader = "Basic " + new String(Base64.encodeBase64(sb.toString().getBytes()));
         httpMethod.addHeader(HttpHeaders.AUTHORIZATION, authHeader);
 
@@ -128,7 +128,7 @@ public class HttpHandler {
         HashMap<String, String> server = new HashMap<String, String>();
         server.put(TaskInputArgs.URI, config.getDomain());
         server.put(TaskInputArgs.USER, config.getUsername());
-        server.put(TaskInputArgs.PASSWORD, config.getPassword());
+        server.put(TaskInputArgs.PASSWORD, getPassword(config.getPassword(), config.getEncryptedPassword()));
         list.add(server);
 
         Map connectionProps = new HashMap();
@@ -141,14 +141,14 @@ public class HttpHandler {
             Proxy proxy = config.getProxy();
             proxyProps.put(TaskInputArgs.URI, proxy.getUri());
             proxyProps.put(TaskInputArgs.USER, proxy.getUser());
-            proxyProps.put(TaskInputArgs.PASSWORD, config.getPassword());
+            proxyProps.put(TaskInputArgs.PASSWORD, getPassword(proxy.getPassword(), proxy.getEncryptedPassword()));
             map.put("proxy", proxyProps);
         }
 
         return map;
     }
 
-    /*private String getPassword(String password, String passwordEncrypted) {
+    private String getPassword(String password, String passwordEncrypted) {
 
         Map<String, String> map = new HashMap<String, String>();
 
@@ -166,7 +166,7 @@ public class HttpHandler {
         String plainPassword = CryptoUtil.getPassword(map);
 
         return plainPassword;
-    }*/
+    }
 
     private String buildCreateUrl() {
         StringBuilder sb = new StringBuilder();

@@ -2,17 +2,21 @@
 domain: "https://sample.atlassian.net"
 username: "<USERNAME>"
 password: "<PASSWORD>"
+#encryptedPassword: ""
 projectKey: "PROJECT_KEY"
 #Optional, if empty logged as Bug
 issueType: "Bug"
+
+#encryptionKey: ""
 
 #http timeouts
 connectTimeout: 10000
 socketTimeout: 10000
 
 proxy:
- uri:
- user:
- password:
+ uri: ""
+ user: ""
+ password: ""
+ #encryptedPassword: ""
 
 
