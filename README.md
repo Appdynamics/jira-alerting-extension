@@ -72,16 +72,16 @@ JIRA from Atlassian, Inc. is a bug and issue tracking product used for project m
 Screenshots of the workflow are depicted below:
 
 ### Action
-![](https://raw.githubusercontent.com/Appdynamics/jira-alerting-extension/master/CreateAction.png)
+![](https://raw.githubusercontent.com/Appdynamics/jira-alerting-extension/master/screenshots/CreateAction.png)
 
 ### Policy
-![](https://raw.githubusercontent.com/Appdynamics/jira-alerting-extension/master/CreatePolicy.png)
+![](https://raw.githubusercontent.com/Appdynamics/jira-alerting-extension/master/screenshots/CreatePolicy.png)
 
 ### Policy Violation
-![](https://raw.githubusercontent.com/Appdynamics/jira-alerting-extension/master/PolicyViolation.png)
+![](https://raw.githubusercontent.com/Appdynamics/jira-alerting-extension/master/screenshots/PolicyViolation.png)
 
 ### Jira Issue
-![](https://raw.githubusercontent.com/Appdynamics/jira-alerting-extension/master/JIRA_Issue.png)
+![](https://raw.githubusercontent.com/Appdynamics/jira-alerting-extension/master/screenshots/JIRA_Issue.png)
 
 
 ##Contributing
