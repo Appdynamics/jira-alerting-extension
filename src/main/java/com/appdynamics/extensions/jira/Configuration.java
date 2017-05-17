@@ -24,6 +24,9 @@ public class Configuration {
     private String password;
     private String projectKey;
     private String issueType;
+    private boolean priorityNotRequired;
+    private String component;
+
 
     private String encryptionKey;
     private String encryptedPassword;
@@ -111,5 +114,21 @@ public class Configuration {
 
     public void setEncryptedPassword(String encryptedPassword) {
         this.encryptedPassword = encryptedPassword;
+    }
+
+    public boolean isPriorityNotRequired() {
+        return priorityNotRequired;
+    }
+
+    public void setPriorityNotRequired(boolean priorityNotRequired) {
+        this.priorityNotRequired = priorityNotRequired;
+    }
+
+    public String getComponent() {
+        return component;
+    }
+
+    public void setComponent(String component) {
+        this.component = component;
     }
 }

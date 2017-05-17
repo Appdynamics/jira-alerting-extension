@@ -3,11 +3,14 @@ domain: "https://sample.atlassian.net"
 username: "<USERNAME>"
 password: "<PASSWORD>"
 #encryptedPassword: ""
+
+#encryptionKey: ""
+
 projectKey: "PROJECT_KEY"
 #Optional, if empty logged as Bug
 issueType: "Bug"
-
-#encryptionKey: ""
+#priorityNotRequired: true
+#component: "Product Extension"
 
 #http timeouts
 connectTimeout: 10000

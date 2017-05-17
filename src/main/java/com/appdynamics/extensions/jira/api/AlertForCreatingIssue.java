@@ -18,9 +18,9 @@ package com.appdynamics.extensions.jira.api;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.google.common.collect.Lists;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @JsonRootName(value = "fields")
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -31,6 +31,7 @@ public class AlertForCreatingIssue {
     private String description;
     private Map<String, String> issuetype = new HashMap<String, String>();
     private Map<String, String> priority = new HashMap<String, String>();
+    private Component [] components;
 
     @JsonIgnore
     private String alertId;
@@ -81,5 +82,13 @@ public class AlertForCreatingIssue {
 
     public void setAlertId(String alertId) {
         this.alertId = alertId;
+    }
+
+    public Component[] getComponents() {
+        return components;
+    }
+
+    public void setComponents(Component[] components) {
+        this.components = components;
     }
 }

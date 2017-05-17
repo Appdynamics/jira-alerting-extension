@@ -21,8 +21,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.base.Strings;
+import com.google.common.collect.Maps;
 import org.apache.log4j.Logger;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -55,7 +57,16 @@ public class AlertBuilder {
 
             alert.getIssuetype().put(FieldKeys.ISSUE_TYPE_NAME, getIssueType(config));
 
-            alert.getPriority().put(FieldKeys.PRIORITY_ID, event.getPriority());
+            if (config.isPriorityNotRequired() == false) {
+                alert.getPriority().put(FieldKeys.PRIORITY_ID, event.getPriority());
+            }
+
+            if(!Strings.isNullOrEmpty(config.getComponent())) {
+                Component component = new Component();
+                component.setName(config.getComponent());
+                Component [] components = {component};
+                alert.setComponents(components);
+            }
 
             alert.setSummary(summary);
             alert.setDescription(description);
